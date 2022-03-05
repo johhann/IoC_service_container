@@ -2,6 +2,9 @@
 
 namespace App\Providers;
 
+use App\Interfaces\SocialMediaServiceInterface;
+use App\Services\LinkedInService;
+use App\Services\TwitterService;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -13,7 +16,12 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+        $this->app->singleton(SocialMediaServiceInterface::class, function(){
+            return
+                new LinkedInService()
+                // new TwitterService('api-key')
+            ;
+        });
     }
 
     /**
