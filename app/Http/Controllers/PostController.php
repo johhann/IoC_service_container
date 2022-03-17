@@ -2,17 +2,19 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Post;
+use App\Publication;
+use Illuminate\Support\Facades\Http;
 use App\Http\Requests\StorePostRequest;
 use App\Http\Requests\UpdatePostRequest;
 use App\Interfaces\SocialMediaServiceInterface;
-use App\Models\Post;
-use App\Publication;
 
 class PostController extends Controller
 {
     protected $socialMediaService;
 
-    public function __construct(SocialMediaServiceInterface $socialMediaService){
+    public function __construct(SocialMediaServiceInterface $socialMediaService)
+    {
         $this->socialMediaService = $socialMediaService;
         // dd($this->publication);
     }
@@ -47,7 +49,18 @@ class PostController extends Controller
      */
     public function store(StorePostRequest $request)
     {
-        //
+        // return $request->all();
+        $response = Http::withHeaders([
+            'Content-Type' => 'application/json',
+            'Accept' => 'application/json',
+        ])->post('http://172.17.104.10:8000/api/login', [
+            'email' => $request->email,
+            'password' => $request->password
+        ]);
+
+        $body = json_decode($response->body());
+
+        return $token = $body->data;
     }
 
     /**
